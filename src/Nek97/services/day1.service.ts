@@ -15,21 +15,28 @@ import {
 
 @Injectable()
 export class Day1Service {
-  private findMax3(elveCaloriesInfoList: TElveCaloriesInfoList): number[] {
-    let relativeMax: number;
-    const maxList = [
-      elveCaloriesInfoList[0].total,
-      elveCaloriesInfoList[0].total,
-      elveCaloriesInfoList[0].total,
-    ];
-    elveCaloriesInfoList.forEach((elveCalories) => {
-      relativeMax = elveCalories.total;
-      maxList.forEach((max, i) => {
-        if (relativeMax > max) {
-          maxList[i] = relativeMax;
-          relativeMax = max;
+  private setMaxList(arr: number[], val: number, elements = 3) {
+    let relativeMax: number = val;
+    let temp: number;
+    let i = 0;
+    if (!arr[elements - 1]) {
+      arr.push(relativeMax);
+    } else {
+      for (i = 0; i < elements; i++) {
+        if (relativeMax > arr[i]) {
+          temp = arr[i];
+          arr[i] = relativeMax;
+          relativeMax = temp;
         }
-      });
+      }
+    }
+    return arr;
+  }
+
+  private findMax3(elveCaloriesInfoList: TElveCaloriesInfoList): number[] {
+    let maxList = [];
+    elveCaloriesInfoList.forEach((elveCalories) => {
+      maxList = this.setMaxList(maxList, elveCalories.total);
     });
     return maxList;
   }
